@@ -116,6 +116,17 @@ Our released implementation is tested on:
 
 ### Dataset
 
+Our documented dataset for training and testing can be downloaded [here](https://drive.upm.es/s/ScoQLcGpRjQv4dT). 
+After downloading and extracting the files into the Data folder, you will get a data structure as follows:
+
+```sh
+  Data
+  ├── train.csv	# Dataset for training
+  ├── test.csv	# Dataset for testing
+  └── SupplemetaryMaterial1.xlsx # Complete documentation of the dataset
+  ```
+
+
 
 ### Training
  
