@@ -27,7 +27,7 @@
 <img src="img/logo.png" alt="Logo" width="150" height="150">
 </a>
 
-<h3 align="center">DrOGA</h3>
+<!--<h3 align="center">DrOGA</h3>-->
 
   <p align="center">
     DrOGA is a benchmark to predict the driver-status of somatic non-synonymous DNA mutations.  
