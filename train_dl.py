@@ -4,12 +4,8 @@ import pandas as pd
 import math
 import os
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data import random_split
-#import torchvision
-#import torchvision.transforms as transforms
 
 from ray import tune
 from ray.tune import CLIReporter
@@ -24,11 +20,9 @@ from utils.FocalLoss import FocalLoss
 from torch.optim.lr_scheduler import CosineAnnealingLR, StepLR
 from warmup_scheduler import GradualWarmupScheduler
 
-
 # Random Seeds
 torch.random.manual_seed(42)
 np.random.seed(42)
-
 
 def get_metrics(y_pred, y_test):
     y_pred_tag = torch.round(torch.sigmoid(y_pred))
@@ -314,8 +308,6 @@ if __name__=='__main__':
     # Hyperparams search scheduler
     # A training result attr to use for comparing time. -> training_iteration is DEFAULT
     scheduler = ASHAScheduler(
-        # metric="f1",
-        # mode="max",
         max_t=max_num_epochs, # max time units per trial.
         grace_period=grace_period, # only stop trials at least this old in time.
         reduction_factor=reduction_factor) # Used to set halving rate and amount.
