@@ -20,6 +20,8 @@ from utils.FocalLoss import FocalLoss
 from torch.optim.lr_scheduler import CosineAnnealingLR, StepLR
 from warmup_scheduler import GradualWarmupScheduler
 
+import argparse
+
 # Random Seeds
 torch.random.manual_seed(42)
 np.random.seed(42)
@@ -240,12 +242,15 @@ def load_data(data_path):
 
 
 if __name__=='__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--model', type=str, default='mlp', help='model to train, possible options: mlp, cnn, cnn-skip')
+    args = parser.parse_args()
 
     max_num_epochs = 1000
     grace_period = 100
     num_samples = 100
     reduction_factor = 4
-    architecture = 'cnn' # cnn or mlp or cnn-skip
+    architecture = args.model # cnn or mlp or cnn-skip
 
     if architecture == 'mlp':
         config = {
@@ -268,8 +273,6 @@ if __name__=='__main__':
             "fc1": tune.choice([512, 256]),
             "fc2": tune.choice([256, 128, 64]),
             "fc3": tune.choice([64, 32]),
-            # "sk2": tune.choice([4, 8, 16]),
-            # "sk1": tune.choice([32, 64]),
             "criterion": "FocalLoss",
             "pos_weight": tune.quniform(1, 3, 0.05),
             "gamma": tune.quniform(1, 4, 0.1),  # Only for Focal loss,
