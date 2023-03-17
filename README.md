@@ -101,21 +101,10 @@ Our released implementation is tested on:
 
 
 
-<!-- GETTING STARTED -->
-## Getting Started
-
-### Prerequisites
-
-### Installation
-  
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
 <!-- USAGE EXAMPLES -->
 ## Usage
 
 ### Dataset
-[here](https://drive.upm.es/s/ScoQLcGpRjQv4dT)
 Our documented dataset for training and testing can be downloaded . 
 After downloading and extracting the files into the Data folder, you will get a data structure as follows:
 
@@ -196,18 +185,27 @@ In order to test all traditional ML and DL models, download weights [here](https
 
 ```sh
   weights
-  ├── CNN	          # Dataset for training
-      ├── train.csv	  # Dataset for training
-  ├── CNN_SKIP	      # Dataset for training
-      ├── train.csv	  # Dataset for training
-  ├── MLP	          # Dataset for training
-      ├── train.csv	  # Dataset for training
-  ├── DecisionTree.h5 # Dataset for training
-  ├── Logistic.h5	  # Dataset for training
-  ├── RF.h5	          # Dataset for training
-  ├── SVM.h5	      # Dataset for testing
-  └── XGB.h5          # Complete documentation of the dataset
+  ├── CNN	          # Weights and parameters of CNN
+  │     └── ...	  
+  ├── CNN_SKIP	          # Weights and parameters of CNN with skip-connections
+  │    └── ...	  
+  ├── MLP	          # Weights and parameters of MLP
+  │    └── ...	  
+  ├── DecisionTree.h5     # Weights of Decision Tree
+  ├── Logistic.h5	  # Weights of Logistic Classification
+  ├── RF.h5	          # Weights of Random Forest
+  ├── SVM.h5	          # Weights of Support Vector Machine
+  └── XGB.h5              # Weights of XGB
   ```
+These models can be tested together obtaining metrics regarding accuracy, precision, 
+recall and F1 over the test slit of our dataset. It is recommended to use GPU to accelerate testing process, 
+but CPU is set automatically if there is not CUDA device found. 
+
+
+```sh
+python test.py
+  ```
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
