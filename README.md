@@ -101,22 +101,11 @@ Our released implementation is tested on:
 
 
 
-<!-- GETTING STARTED -->
-## Getting Started
-
-### Prerequisites
-
-### Installation
-  
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
 <!-- USAGE EXAMPLES -->
 ## Usage
 
 ### Dataset
-
-Our documented dataset for training and testing can be downloaded [here](https://drive.upm.es/s/ScoQLcGpRjQv4dT). 
+Our documented dataset for training and testing can be downloaded . 
 After downloading and extracting the files into the Data folder, you will get a data structure as follows:
 
 ```sh
@@ -126,12 +115,96 @@ After downloading and extracting the files into the Data folder, you will get a 
   └── SupplemetaryMaterial1.xlsx # Complete documentation of the dataset
   ```
 
-
-
 ### Training
- 
+#### Training traditional ML models
+Traditional ML models are trained with the data obtained in previous step and contained in "Data" folder.
+The approach followed uses Random Search for hyperparameter optimization, considering the following models and parameters:
+
+| **Model**           | **Parameter** |                              **Set of values**                               |
+| :------------------ | :-----------: |:----------------------------------------------------------------------------:|
+| Logistic Regression | penalty       |                      *'l1', 'l2', 'elasticnet', 'none'*                      |
+|                     | C             |                          *100, 10, 1\.0, 0.1, 0.01*                          |
+|                     | tol           |                              *1e-3, 1e-4, 1e-5*                              |
+| SVM                 | C             |                           *0\.01, 0.1, 1, 10, 100*                           |
+|                     | kernel        |                     *'poly', 'rbf', 'sigmoid', 'linear'*                     |
+|                     | gamma         |             *10, 1, 0\.1, 0.01, 0.001, 0.0001, 'scale', 'auto'*              |
+|                     | tol           |                              *1e-3, 1e-4, 1e-2*                              |
+| Decision Tree       | max\_depth    |                                    *2-20*                                    |
+|                     | criterion     |                             *'gini', 'entropy'*                              |
+| Random Forest       | max\_depth    |                               *5, 10, 'None'*                                |
+|                     | criterion     |                             *'gini', 'entropy'*                              |
+|                     | max\_features |                           *'auto', 'log2', 'None'*                           |
+|                     | n\_estimators | *100, 200, 300, 400, <br> 500, 600, 1000, 2000, <br> 3000, 4000, 5000, 6000* |
+|                     | bootstrap     |                                *True, False*                                 |
+| XGBoost             | n\_estimators |                            *100, 500, 1000, 2000*                            |
+|                     | learning rate |                     *0\.001, 0.01, 0.05, 0.1, 0.3, 0.5*                      |
+|                     | max\_depth    |                                *5-20, 'None'*                                |
+|                     | booster       |                        *'gbtree', 'gblinear', 'dart'*                        |
+|                     | reg\_alpha    |                          *1, 0\.1, 0.01, 0.001, 0*                           |
+|                     | reg\_lambda   |                          *1, 0\.1, 0.01, 0.001, 0*                           |
+
+For training the models, these parameters can be modified directly from the source code, and later run by:
+
+```sh
+python train_traditional_ml.py
+  ```
+
+#### Training DL models
+Deep Learning models are also trained with the data obtained in previous step and contained in "Data" folder.
+The approach followed uses Ray for hyperparameter optimization, considering the following models and parameters:
+
+
+| **Model**                          | **Parameter**          | **Set of values** | **Parameter** | **Set of values**  |
+| :--------------------------------- | :--------------------: | :---------------: | :-----------: | :----------------: |
+| Deep Multi-Layer <br>  Perceptron  | number of layers       | *1, 3, 5, 7*      | lr            | *1e-8-1e-6*        |
+|                                    | starting exponent      | *4, 5, 6, 7*      | weight decay  | *0, 0\.1*          |
+|                                    | alpha                  | *1\.00-3.00*      | batch size    | *32, 64, 128, 256* |
+|                                    | gamma                  | *1\.0-4.0*        | warm up steps | *0-100*            |
+| Convolutional <br>  Neural Network | number of  filters 1   | *8, 16*           | alpha         | *1\.00-3.00*       |
+|                                    | number of  filters 2   | *32, 64*          | gamma         | *1\.0-4.0*         |
+|                                    | number of neurons 1    | *512, 256*        | lr            | *1e-8-1e-6*        |
+|                                    | number of neurons 2    | *256, 128, 64*    | weight decay  | *0, 0\.1*          |
+|                                    | number of neurons 3    | *64, 32*          | batch size    | *32, 64, 128, 256* |
+|                                    | number of filters skip | *32, 64*          | warm up steps | *0-100*            |
+|                                    | number of neurons skip | *4, 8, 16*        |               |                    |
+
+For training the models, first you need to select which model you want to train from the 3 available:
+* MLP: 'mlp'
+* CNN: 'cnn'
+* CNN with skip connections: 'cnn-skip'
+
+these parameters can be modified directly from the source code. An example of use for training CNN model:
+[weights](weights)
+```sh
+python train_dl.py --model cnn
+  ```
 
 ### Testing 
+Testing pre-trained algorithms is also available to check results provided in our publication.
+In order to test all traditional ML and DL models, download weights [here](https://upm365-my.sharepoint.com/:f:/g/personal/anaida_fernandez_upm_es/EnToYcvIjnJMvIR2ZVsYeGcBmQuCPD4iGbSww-QsGqKOeg?e=aHqevU) and add them to the folder as follows:
+
+```sh
+  weights
+  ├── CNN	          # Weights and parameters of CNN
+  │     └── ...	  
+  ├── CNN_SKIP	          # Weights and parameters of CNN with skip-connections
+  │    └── ...	  
+  ├── MLP	          # Weights and parameters of MLP
+  │    └── ...	  
+  ├── DecisionTree.h5     # Weights of Decision Tree
+  ├── Logistic.h5	  # Weights of Logistic Classification
+  ├── RF.h5	          # Weights of Random Forest
+  ├── SVM.h5	          # Weights of Support Vector Machine
+  └── XGB.h5              # Weights of XGB
+  ```
+These models can be tested together obtaining metrics regarding accuracy, precision, 
+recall and F1 over the test slit of our dataset. It is recommended to use GPU to accelerate testing process, 
+but CPU is set automatically if there is not CUDA device found. 
+
+
+```sh
+python test.py
+  ```
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
